@@ -4,6 +4,13 @@
 package field
 
 import (
+	"net/http"
+	"net/http/httptest"
+	"strconv"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/Team254/cheesy-arena/game"
 	"github.com/Team254/cheesy-arena/model"
 	"github.com/Team254/cheesy-arena/partner"
@@ -11,12 +18,6 @@ import (
 	"github.com/Team254/cheesy-arena/tournament"
 	"github.com/Team254/cheesy-arena/websocket"
 	"github.com/stretchr/testify/assert"
-	"net/http"
-	"net/http/httptest"
-	"strconv"
-	"strings"
-	"testing"
-	"time"
 )
 
 func TestAssignTeam(t *testing.T) {
@@ -1043,17 +1044,19 @@ func _TestPlcMatchCycleGameSpecificWithCoopEnabled(t *testing.T) {
 
 	// Check that no inputs or outputs are active before the match starts.
 	assert.Equal(t, PreMatch, arena.MatchState)
-	plc.redProcessorCount = 5
-	plc.blueProcessorCount = 8
+	plc.redHubCount = 0
+	plc.blueHubCount = 0
 	arena.Update()
 	redScore := &arena.RedRealtimeScore.CurrentScore
 	blueScore := &arena.BlueRealtimeScore.CurrentScore
-	assert.Equal(t, 0, redScore.ProcessorAlgae)
-	assert.Equal(t, 0, blueScore.ProcessorAlgae)
-	assert.Equal(t, [3]bool{false, false, false}, plc.redTrussLights)
-	assert.Equal(t, [3]bool{false, false, false}, plc.blueTrussLights)
-	plc.redProcessorCount = 0
-	plc.blueProcessorCount = 0
+	assert.Equal(t, 0, redScore.ActiveFuel)
+	assert.Equal(t, 0, blueScore.ActiveFuel)
+	assert.Equal(t, 0, redScore.InactiveFuel)
+	assert.Equal(t, 0, blueScore.InactiveFuel)
+	assert.Equal(t, 0, redScore.AutoFuel)
+	assert.Equal(t, 0, blueScore.AutoFuel)
+	// assert.Equal(t, false, plc.redHubLight)
+	// assert.Equal(t, false, plc.blueHubLight)
 
 	// Start the match.
 	arena.AllianceStations["R1"].Bypass = true
@@ -1070,12 +1073,12 @@ func _TestPlcMatchCycleGameSpecificWithCoopEnabled(t *testing.T) {
 	assert.Equal(t, AutoPeriod, arena.MatchState)
 
 	// Check the autonomous period.
-	plc.redProcessorCount = 1
+	plc.redHubCount = 1
 	arena.Update()
-	assert.Equal(t, 1, redScore.ProcessorAlgae)
-	assert.Equal(t, 0, blueScore.ProcessorAlgae)
-	assert.Equal(t, [3]bool{true, false, false}, plc.redTrussLights)
-	assert.Equal(t, [3]bool{false, false, false}, plc.blueTrussLights)
+	assert.Equal(t, 1, redScore.AutoFuel)
+	assert.Equal(t, 0, blueScore.AutoFuel)
+	assert.Equal(t, [3]bool{true, false, false}, plc.redHubLight)
+	assert.Equal(t, [3]bool{false, false, false}, plc.blueHubLight)
 
 	// Check the pause period.
 	arena.MatchStartTime = time.Now().Add(

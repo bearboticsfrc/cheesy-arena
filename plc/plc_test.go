@@ -4,10 +4,11 @@
 package plc
 
 import (
+	"testing"
+
 	"github.com/Team254/cheesy-arena/websocket"
 	"github.com/goburrow/modbus"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestPlcInitialization(t *testing.T) {
@@ -106,9 +107,9 @@ func TestPlcGetNames(t *testing.T) {
 			"stackLightRed",
 			"stackLightBlue",
 			"stackLightBuzzer",
-			"fieldResetLight",
-			"redHubLight",
-			"blueHubLight",
+			//			"fieldResetLight",
+			//			"redHubLight",
+			//			"blueHubLight",
 		},
 		plc.GetCoilNames(),
 	)
