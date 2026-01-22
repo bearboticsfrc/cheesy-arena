@@ -7,11 +7,12 @@ package plc
 
 import (
 	"fmt"
-	"github.com/Team254/cheesy-arena/websocket"
-	"github.com/goburrow/modbus"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/Team254/cheesy-arena/websocket"
+	"github.com/goburrow/modbus"
 )
 
 type Plc interface {
@@ -114,12 +115,12 @@ const (
 	stackLightRed
 	stackLightBlue
 	stackLightBuzzer
-	fieldResetLight
-	redHubLight
-	blueHubLight
-	hubMotors
 	coilCount
 )
+
+//	fieldResetLight
+//	redHubLight
+//	blueHubLight
 
 // Bitmask for decoding fieldIoConnection into individual ArmorBlock connection statuses.
 //
@@ -262,7 +263,7 @@ func (plc *ModbusPlc) SetStackBuzzer(state bool) {
 
 // Sets the on/off state of the field reset light.
 func (plc *ModbusPlc) SetFieldResetLight(state bool) {
-	plc.coils[fieldResetLight] = state
+	// plc.coils[fieldResetLight] = state
 }
 
 func (plc *ModbusPlc) GetCycleState(max, index, duration int) bool {
@@ -300,8 +301,8 @@ func (plc *ModbusPlc) GetHubBallCounts() (int, int) {
 
 // Sets the state of the red and blue hub lights.
 func (plc *ModbusPlc) SetHubLights(redLight, blueLight bool) {
-	plc.coils[redHubLight] = redLight
-	plc.coils[blueHubLight] = blueLight
+	// plc.coils[redHubLight] = redLight
+	// plc.coils[blueHubLight] = blueLight
 }
 
 func (plc *ModbusPlc) SetHubMotors(state bool) {
