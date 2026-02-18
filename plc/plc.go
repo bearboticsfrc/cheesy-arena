@@ -306,7 +306,7 @@ func (plc *ModbusPlc) SetHubLights(redLight, blueLight bool) {
 }
 
 func (plc *ModbusPlc) SetHubMotors(state bool) {
-	plc.coils[hubMotors] = state
+// 	plc.coils[hubMotors] = state
 }
 
 func (plc *ModbusPlc) connect() error {
